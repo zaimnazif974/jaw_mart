@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:jaw_mart/menu.dart';
+import 'package:jaw_mart/screens/menu.dart';
 
 void main() {
   runApp(const MyApp());
