@@ -2,75 +2,111 @@
 **Kelas   : F**
 **NPM     : 2206082524**
 
-TUGAS 7:
+TUGAS 8:
 
-**Apa perbedaan utama antara stateless dan stateful widget dalam konteks pengembangan aplikasi Flutter?**
+**Jelaskan perbedaan antara `Navigator.push()` dan `Navigator.pushReplacement()`, disertai dengan contoh mengenai penggunaan kedua metode tersebut yang tepat!**
 
-1. Stateless Widget:
-    - Tidak memiliki state internal sehingga ketika widget ini dibuat dan dirender pertama kali, properti atau tampilan dalam widget tidak dapat diubah (statis).
-    - Cocok digunakan ketika kita ingin menampilkan data yang sama selama apps berjalan.
+`Navigator.push()` menimpa tampilan sebelumnya dengan tampilan baru, sedangkan `Navigator.pushReplacement()` mengganti tampilan sebelumnya dengan tampilan baru tanpa mengubah jumlah rute pada stack flutter. 
 
-2. Stateful widget:
-    - Memiliki state internal sehingga properti atau tampilan widget dapat berubah-ubah dengan cara merender ulang.
-    - Cocok digunakan untuk widget yang akan digunakan untuk interaksi dengan pengguna 
+`Navigator.push()` cocok digunakan ketika developer ingin mempertahankan halaman awalnya ketika ingin menampilkan halaman baru. Developer dapat menambahkan potongan kode `Navigator.pop()` untuk kembali ke halaman yang ditimpa.
 
-**Sebutkan seluruh widget yang kamu gunakan untuk menyelesaikan tugas ini dan jelaskan fungsinya masing-masing.**
+`Navigator.pushReplacement()` cocok digunakan ketika developer tidak ingin mempertahankan halaman awalanya ketika ingin menampilkan halaman baru.
 
-widget pada`main.dart`:
-    1. MyApp : root dari aplikasi yang menampung seluruh widget yang ada pada apps ini.
-    2. MaterialApp : digunakan untuk mengatur konfigurasi global. aplikasi dan menyediakan kerangka kerja untuk membangun aplikasi.
-    3. MyHomePage : merupakan widget halaman utama aplikasi.
 
-widget pada `menu.dart`:
-    1. Scaffold : menyediakan struktur dasar untuk tampilan halaman.
-    2. AppBar : menampilkan header atas aplikasi dengan judul.
-    3. SingleChildScrollView : memungkinkan untuk melakukan scrolling pada konten
-    4. Padding : menambahkan padding konten
-    5. Column : mengatur posisi children widget secara vertikal.
-    6. Text : menampilkan teks dengan gaya tertentu.
-    7. GridView.count : digunakan untuk mengatur tampilan berupa grid layout.
-    8. ShopCard : menampilkan card tombol View Item, Add Item, dan Logout.
-    9. Material : digunakan untuk mengatur warna latar belakang dan tampilan dasar untuk card.
-    10. InkWell : memungkinkan area card menjadi responsif terhadap sentuhan pengguna, sehingga dapat mendeteksi ketika card ditekan.
-    11. Container : digunakan untuk mengatur struktur konten dalam kotak dengan padding yang telah ditentukan.
-    12. Center : mengatur konten agar tepat di tengah card.
-    13. Icon : widget untuk menampilkan icon tertentu.
-    14. SnackBar : digunakan untuk menampilkan pesan pada pengguna.
+**Jelaskan masing-masing layout widget pada Flutter dan konteks penggunaannya masing-masing!**
 
-**Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial)**
+1. Container : digunakan untuk menempatkan widget lain dan memberikan kontrol terhadap padding, margin, background color, border, dan lain-lain.
 
-1. Membuat project flutter dengan menggunakan perintah pada direktori yang telah dipilih
-    ```
-    flutter create jaw_mart
-    ```
-    kemudian membuat file bernama `menu.dart` pada direktori `jaw_mart/lib` dan mengimport package  `material.dart` dari flutter. Kemudian memindahkan class MyHomePage dan _MyHomePageState pada `main.dart` ke `menu.dart`. Kemudian menginmport `menu.dart` pada `main.dart`.
+2. Row : digunakan untuk menyusun widget secara horizontal (ke samping).
 
-2. Membuat 3 tombol sederhana
+3. Column : digunakan untuk menyusun widget secara vertikal.
 
-    Untuk membuat tiga tombol sederhana, saya terlebih dahulu mengubah warna tema aplikasi menjadi Indigo. Kemudian pada class MyHomePage di main.dart, saya menghapus MyHomePage(title: 'Flutter Demo Home Page'). Pada menu.dart, saya mengubah state menjadi stateless agar statis dan meningkatkan performa aplikasi. Saya juga melakukan perubahan pada bagian ({super.key, required this.title}) menjadi ({Key? key}) : super(key: key);. Setelah itu, saya menghapus kode pada class tersebut dari final string title hingga kebawah. Untuk membuat objek informasi itemnya, saya membuat class ShopItem yang memiliki atribut nama dan icon.pada class MyHomePage, saya menambahkan kode berikut untuk menampilkan card pada halaman utama.
+4. ListView : digunakan untuk membuat daftar yang dapat di scroll dari widget. Berguna ketika aplikasi memiliki daftar item atau komponen yang melebihi ukuran layar.
 
-    ```dart
-    final List<ShopItem> items = [
-        ShopItem("View Item", Icons.checklist, Colors.blue),
-        ShopItem("Add Item", Icons.add_circle, Colors.orangeAccent),
-        ShopItem("Logout", Icons.logout, Colors.red),
-    ];
-    ```
-    Kemudian saya membuat AppBar, dan membuat agar tampilan pada isi halaman page dapat di scroll serta membuat agar card yang ditampilkan tertata dengan rapi menggunakan GridView. Lalu saya juga membuat class baru bernama ShopCard untuk meletakkan ShopItem dengan card. Pada kelas tersebut, terdapat atribut ShopItem dan memiliki widget-widget yang dibutuhkan untuk membentuk sebuah card.
+5. GridView : digunakan untuk menampilkan daftar item dalam bentuk grid. 
 
-3. Menambahkan snackbar
+6. Stack : digunakan untuk menyusun widget diatas satu sama lain (tumpukan).
 
-    menambahkan state onTap agar ketika card ditekan akan memunculkan snackbar dengan menggunakan perintah dibawah ini dalam InkWell:
+7. Expanded / Flekxible : digunakan untuk mengisi ruang kosong yang tersisa dalan widget induk.
 
-    ```dart
-    InkWell(
-        onTap: () {
-          ScaffoldMessenger.of(context)
-            ..hideCurrentSnackBar()
-            ..showSnackBar(SnackBar(
-                content: Text("Kamu telah menekan tombol ${item.name}!")));
-        },
-    )
-    
-    ```
+8. SizedBox : digunakan untuk membuat kotak kosong dengan ukuran tertentu. Berguna untuk memberikan jarak antara widget-widget
+
+9. Wrap : digunakan untuk menyusun widget ke dalam baris dan kolom, serupa dengan Row dan Column, tetapi dengan fitur wrap
+
+10. Card : digunakan untuk mengelompokkan widget-widget dalam sebuah kartu. Berguna untuk menyajikan informasi atau fungsi terkait sebagai satu unit yang terpisah.
+
+11. Align : digunakan untuk menempatkan widget ke posisi tertentu dalam parent widget.
+
+12. Positioned : digunakan untuk memberikan lebih banyak kontrol terhadap posisi dan ukuran widget dalam parent daripada Align
+
+13. AspectRatio : digunakan untuk memastikan bahwa widget memiliki aspect ratio tertentu.
+
+
+**Sebutkan apa saja elemen input pada form yang kamu pakai pada tugas kali ini dan jelaskan mengapa kamu menggunakan elemen input tersebut!**
+
+1. Form : digunakan untuk mengatur dan mem-validasi input nama barang, jumlah barang, deskripsi, efek, kategori, dan harga barang.
+
+2. TextFormField : digunakan untuk input field data barang melalui sebuah text field.
+
+
+**Bagaimana penerapan clean architecture pada aplikasi Flutter?**
+
+Berikut adalah penerapan flutter clean architecture:
+
+```
+lib/
+    app/                          <--- application layer
+        pages/                        <-- pages or screens
+          login/                        <-- some page in the app
+            login_controller.dart         <-- login controller extends `Controller`
+            login_presenter.dart          <-- login presenter extends `Presenter`
+            login_view.dart               <-- login view, 2 classes extend `View` and `ViewState` resp.
+        widgets/                      <-- custom widgets
+        utils/                        <-- utility functions/classes/constants
+        navigator.dart                <-- optional application navigator
+    data/                         <--- data layer
+        repositories/                 <-- repositories (retrieve data, heavy processing etc..)
+          data_auth_repo.dart           <-- example repo: handles all authentication
+        helpers/                      <-- any helpers e.g. http helper
+        constants.dart                <-- constants such as API keys, routes, urls, etc..
+    device/                       <--- device layer
+        repositories/                 <--- repositories that communicate with the platform e.g. GPS
+        utils/                        <--- any utility classes/functions
+    domain/                       <--- domain layer (business and enterprise) PURE DART
+        entities/                   <--- enterprise entities (core classes of the app)
+          user.dart                   <-- example entity
+          manager.dart                <-- example entity
+        usecases/                   <--- business processes e.g. Login, Logout, GetUser, etc..
+          login_usecase.dart          <-- example usecase extends `UseCase` or `CompletableUseCase`
+        repositories/               <--- abstract classes that define functionality for data and device layers
+    main.dart                     <--- entry point
+```
+
+sumber : https://pub.dev/packages/flutter_clean_architecture
+
+
+**Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step! (bukan hanya sekadar mengikuti tutorial)**
+
+- Membuat halaman formulir:
+    1. Membuat file dart baru bernama `jawmart_from.dart` yang digunakan untuk halaman form. Kemudian membuat 2 kelas yaitu ShopFormPage yang digunakan untuk menampilkan halaman formulir dan _ShopFormPage untuk mengelola tampilan halaman formulir.
+
+    2. Menambahkan field form pada kelas ShopFormPage sesuai field yang dimiliki item pada tugas django.
+
+    3. membuat widget Scaffold untuk membuat template form pada method build di _ShopFormPage. Membuat objek form untuk menangani formulir dengan validasi dan mengelompokkan elemen-elemen input menggunakan TextFormField
+
+    4. Membuat tombol save dengan menggunakan widget Elevated Button.
+
+- Mengarahkan user ke halaman form:
+    Menambahkan conditional pada `shop_card.dart` yang akan merespon ketika card ditekan melalui fungsi onTap(). Ketika nama dari card tersebut adalah "Add Item" maka user akan dipindahkan ke halaman form menggunakan `Navigator.pushReplacement()`
+
+- Memunculkan data sesuai dengan isi formulir:
+    Menambahkan method showDialog pada ElevatedButton pada `jawmart_form.dart` agar ketika form telah divalidasi dapat memunculkan data sesuai dengan inputan dari user.
+
+- Membuat drawer:
+    1. Membuat file dart baru bernama `left_drawer.dart` untuk menampilkan drawer pada aplikasi. Di dalam program tersebut, buat class baru bernama "LeftDrawer" yang bersifat stateless.
+
+    2. Membuat ListView dan menambhakan ListTile yang diperlukan (Halaman utama dan form).
+
+    3. Menambahkan rute yang sesuai pada ListView menggunakan `Navigator.pushReplacement()`
+
 
