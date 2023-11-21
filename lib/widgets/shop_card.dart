@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:pbp_django_auth/pbp_django_auth.dart';
+import 'package:provider/provider.dart';
+import 'package:jaw_mart/screens/list_product.dart';
+import 'package:jaw_mart/screens/login.dart';
 import 'package:jaw_mart/screens/jawmart_form.dart';
-import 'package:jaw_mart/screens/jawmart_items.dart';
 
 class ShopItem {
   final String name;
   final IconData icon;
-  final Color color;
 
-  ShopItem(this.name, this.icon, this.color);
+  ShopItem(this.name, this.icon);
 }
 
 class ShopCard extends StatelessWidget {
@@ -17,25 +19,59 @@ class ShopCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      color: item.color,
-      child: InkWell(
+    final request = context.watch<CookieRequest>();
 
-        onTap: () {
+    return Material(
+      color: Colors.indigo,
+      child: InkWell(
+        // Area responsive terhadap sentuhan
+        onTap: () async {
+          // Memunculkan SnackBar ketika diklik
           ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()
             ..showSnackBar(SnackBar(
                 content: Text("Kamu telah menekan tombol ${item.name}!")));
 
+          // Navigate ke route yang sesuai (tergantung jenis tombol)
           if (item.name == "Add Item") {
-            Navigator.pushReplacement(context,
+            Navigator.push(context,
                 MaterialPageRoute(builder: (context) => const ShopFormPage()));
-          } else if (item.name == "View Item"){
-            Navigator.pushReplacement(context,
-                MaterialPageRoute(builder: (context) => const JawItemsList()));
+
+          } else if (item.name == "View Item") {
+
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => const ProductPage()));
+
+          } else if (item.name == "Logout") {
+
+            final response = await request.logout("http://localhost:8000/auth/logout/"); // localhost
+
+            String message = response(["message"]);
+            if (response['status']) {
+              String uname = response["username"];
+              // ignore: use_build_context_synchronously
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: Text("$message Sampai jumpa, $uname."),
+              ));
+
+              // ignore: use_build_context_synchronously
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => const LoginPage()),
+              );
+
+            } else {
+              // ignore: use_build_context_synchronously
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text(message)),
+              );
+            }
+
           }
         },
+
         child: Container(
+          // Container untuk menyimpan Icon dan Text
           padding: const EdgeInsets.all(8),
           child: Center(
             child: Column(
