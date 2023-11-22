@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:jaw_mart/widgets/left_drawer.dart';
 import 'package:jaw_mart/screens/jawmart_items.dart';
+import 'dart:convert';
+import 'package:pbp_django_auth/pbp_django_auth.dart';
+import 'package:provider/provider.dart';
+import 'package:jaw_mart/screens/menu.dart';
 
 class ShopFormPage extends StatefulWidget {
   const ShopFormPage({super.key});
@@ -21,6 +25,8 @@ class _ShopFormPageState extends State<ShopFormPage> {
 
   @override
   Widget build(BuildContext context) {
+    final request = context.watch<CookieRequest>();
+
     return Scaffold(
       appBar: AppBar(
         title: const Center(
@@ -194,7 +200,7 @@ class _ShopFormPageState extends State<ShopFormPage> {
                         MaterialStateProperty.all(Colors.indigo),
                       ),
 
-                      onPressed: () {
+                      onPressed: () async {
 
                         if (_formKey.currentState!.validate()) {
                           _dateAdded = DateTime.now();
@@ -203,36 +209,59 @@ class _ShopFormPageState extends State<ShopFormPage> {
                           jawItems.add(JawItems(_name,_price,_category,_amount,_description,_description,
                               _dateAdded,Colors.blueAccent));
 
+                          final response = await request.postJson(
+                              "http://localhost:8000/create-flutter/",
+                              jsonEncode(<String, String>{
+                                'name': _name,
+                                'amount': _amount.toString(),
+                                'description': _description,
+                                'effect' : _effect,
+                                'category' : _category,
+                                'dateAdded' : _dateAdded.toString(),
+
+                              }));
+
+                          if (response['status'] == 'success') {
+                            // ignore: use_build_context_synchronously
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(const SnackBar(
+                              content: Text("Produk baru berhasil disimpan!"),
+                            ));
+                            // ignore: use_build_context_synchronously
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(builder: (context) => MyHomePage()),
+                            );
+                          } else {
+                            // ignore: use_build_context_synchronously
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(const SnackBar(
+                              content:
+                              Text("Terdapat kesalahan, silakan coba lagi."),
+                            ));
+                          }
+
+                          // ignore: use_build_context_synchronously
                           showDialog(
-                            context: context,
-                            builder: (context) {
-                              return AlertDialog(
-                                title: const Text('Produk berhasil tersimpan'),
-                                content: SingleChildScrollView(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                    CrossAxisAlignment.start,
-                                    children: [
-                                      Text('Nama: $_name'),
-                                      Text('Harga: $_price'),
-                                      Text('Deskripsi : $_description'),
-                                      Text('Kategori : $_category'),
-                                      Text('Jumlah : $_amount'),
-                                      Text('Efek : $_effect'),
-                                      Text('Tanggal Masuk : $_dateAdded'),
-                                    ],
+                              context: context,
+                              builder: (context) {
+                                return AlertDialog(
+                                  title: const Text('Produk berhasil tersimpan'),
+                                  content: SingleChildScrollView(
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text('Nama: $_name'),
+                                        Text('Amount: $_amount'),
+                                        Text('Description: $_description'),
+                                        Text('Effect: $_effect'),
+                                        Text('Category: $_category'),
+                                        Text('DateAdded: $_dateAdded'),
+                                      ],
+                                    ),
                                   ),
-                                ),
-                                actions: [
-                                  TextButton(
-                                    child: const Text('OK'),
-                                    onPressed: () {
-                                      Navigator.pop(context);
-                                    },
-                                  ),
-                                ],
-                              );
-                            },
+                                );
+                              }
                           );
                           _formKey.currentState!.reset();
                         }
